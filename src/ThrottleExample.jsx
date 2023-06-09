@@ -12,10 +12,29 @@ const ballStyle = {
 export default function ThrottleExample() {
   const ballRef = useRef(null);
 
-  const updateBallPostion = throttleBall((positionX, positionY) => {
+  //USING DEBOUNCING ALGORITHM
+  const updateBallPostion = debounceBall((positionX, positionY) => {
     ballRef.current.style.top = `${positionY}px`;
     ballRef.current.style.left = `${positionX}px`;
   });
+
+  //USING THROTTLE ALGORITHM
+  //   const updateBallPostion = throttleBall((positionX, positionY) => {
+  //     ballRef.current.style.top = `${positionY}px`;
+  //     ballRef.current.style.left = `${positionX}px`;
+  //   });
+
+  function debounceBall(callback, delay = 100) {
+    let timeout;
+    return (x, y) => {
+      if (timeout !== null) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(() => {
+        callback(x, y);
+      }, delay);
+    };
+  }
 
   function throttleBall(callback, delay = 100) {
     let coordinates = { x: 0, y: 0 };
